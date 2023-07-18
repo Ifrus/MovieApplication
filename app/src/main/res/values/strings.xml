@@ -3,4 +3,5 @@
     <string name="keywords">Keywords</string>
     <string name="actors">Actors</string>
     <string name="genres">Genres\n</string>
+    <string name="save">Save</string>
 </resources>
