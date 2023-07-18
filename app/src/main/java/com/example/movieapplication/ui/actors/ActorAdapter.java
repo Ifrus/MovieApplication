@@ -47,6 +47,7 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         notifyDataSetChanged();
     }
 
+
     static class ActorViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewActorName;

@@ -14,6 +14,7 @@
     <ImageView
         android:id="@+id/actorsImageView"
         android:layout_width="98dp"
-        android:layout_height="97dp"/>
+        android:layout_height="97dp"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>
