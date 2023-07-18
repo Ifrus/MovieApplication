@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/onboarding">
+
+    <!-- Genres Button -->
+    <Button
+        android:id="@+id/btnGenres"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="@string/genres"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp" />
+
+    <!-- Actors Button -->
+    <Button
+        android:id="@+id/btnActors"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="@string/actors"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp" />
+
+    <!-- Keywords Button -->
+    <Button
+        android:id="@+id/btnKeywords"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="@string/keywords"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_button"
+        android:elevation="6dp" />
+
+</LinearLayout>
