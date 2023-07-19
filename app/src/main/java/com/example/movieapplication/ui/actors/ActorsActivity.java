@@ -1,7 +1,10 @@
 package com.example.movieapplication.ui.actors;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -11,18 +14,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ActorsActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private ActorAdapter actorAdapter;
 
     private ActorViewModel actorViewModel;
 
+    private Button btnSaveActors;
+    private static final String KEY_ACTORS = "selected_actors";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_actors);
+
+        btnSaveActors = findViewById(R.id.btnSaveActors);
+        btnSaveActors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //saveSelectedActors();
+                finish();
+            }
+        });
 
         recyclerView = findViewById(R.id.recyclerViewActors);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -35,8 +53,26 @@ public class ActorsActivity extends AppCompatActivity {
             public void onChanged(List<Actor> actors) {
                 if (actors != null) {
                     actorAdapter.setActors(actors);
+                   // updateSaveButtonEnabled();
                 }
             }
         });
     }
+    /*private void saveSelectedActors() {
+        Set<String> selectedActors = new HashSet<>();
+        List<Actor> actors = actorAdapter.getActors();
+            for (Actor actor : actors) {
+                if (actor.isSelected()) {
+                    selectedActors.add(actor.getName());
+                }
+            }
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet(KEY_ACTORS, selectedActors);
+            editor.apply();
+        }
+    private void updateSaveButtonEnabled() {
+        // Enable the save button if any actor is selected, disable it otherwise
+        btnSaveActors.setEnabled(actorAdapter.isAnyActorSelected());
+    }*/
 }

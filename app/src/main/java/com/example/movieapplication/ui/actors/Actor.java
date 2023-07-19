@@ -3,19 +3,19 @@ package com.example.movieapplication.ui.actors;
 import com.google.gson.annotations.SerializedName;
 
 public class Actor {
-    @SerializedName("id")
-    private int id;
 
-    @SerializedName("name")
-    private String name;
+   // @SerializedName("name")
+    private final String name;
 
-    @SerializedName("profile_path")
-    private String profilePath;
+   // @SerializedName("profile_path")
+    private final String profilePath;
 
-    public int getId() {
-        return id;
-    }
     public Boolean isSelected;
+
+    public Actor(String name, String profilePath){
+        this.name = name;
+        this.profilePath = profilePath;
+    }
 
 
     public String getName() {
@@ -27,8 +27,12 @@ public class Actor {
         return profilePath;
     }
 
-    public Boolean getSelected() {
+    public boolean isSelected() {
         return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
 

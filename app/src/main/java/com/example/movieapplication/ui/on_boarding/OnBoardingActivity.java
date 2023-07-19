@@ -46,6 +46,14 @@ public class OnBoardingActivity extends AppCompatActivity {
                 startActivity(new Intent(OnBoardingActivity.this, ActorsActivity.class));
             }
         });
+
+        Button keywordsButton = findViewById(R.id.btnKeywords);
+        keywordsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(OnBoardingActivity.this, KeywordsActivity.class));
+            }
+        });
     }
 
     @Override

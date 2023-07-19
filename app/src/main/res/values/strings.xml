@@ -4,4 +4,6 @@
     <string name="actors">Actors</string>
     <string name="genres">Genres\n</string>
     <string name="save">Save</string>
+    <string name="enter_keywords_separated_by_commas">Enter keywords separated by commas</string>
+    <string name="SAVE">SAVE</string>
 </resources>

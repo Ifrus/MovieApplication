@@ -1,5 +1,9 @@
 package com.example.movieapplication.ui.genres;
 
+import android.content.Context;
+
+import com.example.movieapplication.ui.SharedPreferencesHelper;
+
 public class Genre {
     private int id;
 
@@ -13,5 +17,9 @@ public class Genre {
     public int getId(){return id; }
 
     public String getName(){return name; }
+
+ /*   public void saveData(Context context) {
+        SharedPreferencesHelper.saveData(context, "genre_data", this);
+    }*/
 }
 

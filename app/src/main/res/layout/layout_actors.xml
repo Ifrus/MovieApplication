@@ -11,11 +11,10 @@
         android:layout_weight="1"
         android:padding="8dp"
         android:clipToPadding="false"
-        android:background="@android:color/white"
         android:nestedScrollingEnabled="false" />
 
     <Button
-        android:id="@+id/btnSaveGenres"
+        android:id="@+id/btnSaveActors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"

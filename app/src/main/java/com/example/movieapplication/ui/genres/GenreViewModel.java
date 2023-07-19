@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movieapplication.database.interfaces.TMDBApiService;
+import com.example.movieapplication.ui.SharedPreferencesHelper;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +30,16 @@ public class GenreViewModel extends ViewModel {
         return genresLiveData;
     }
 
+   /* public void saveSelectedGenres(List<Genre> genres){
+        Set<String> selectedGenres = new HashSet<>();
+        for(Genre genre : genres){
+            if(genre.isSelected()){
+                selectedGenres.add(genre.getName());
+            }
+        }
+        SharedPreferencesHelper.saveData(application, "selecte_genres", selectedGenres);
+    }*/
+
     private void loadGenres(){
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -36,6 +49,7 @@ public class GenreViewModel extends ViewModel {
 
         TMDBApiService movieApiService = retrofit.create(TMDBApiService.class);
         Call<GenreResponse> call = movieApiService.getGenres();
+       /* Set<String> selectedGenres = SharedPreferencesHelper.getData(application, "selected_genres", null);*/
 
         call.enqueue(new Callback<GenreResponse>() {
             @Override

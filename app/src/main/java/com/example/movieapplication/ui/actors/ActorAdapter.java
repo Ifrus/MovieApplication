@@ -29,6 +29,7 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
     @Override
     public void onBindViewHolder(@NonNull ActorViewHolder holder, int position) {
         Actor actor = actors.get(position);
+        holder.bind(actor);
         holder.textViewActorName.setText(actor.getName());
 
         String profile_path = actor.getImage();
@@ -36,27 +37,45 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         Picasso.get().load(imageUrl).into(holder.actorsImageView);
     }
 
+//    public List<Actor> getActors() {
+//        return actors;
+//    }
     @Override
     public int getItemCount() {
         return actors.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+//    @SuppressLint("NotifyDataSetChanged")
     public void setActors(List<Actor> actors) {
         this.actors = actors;
         notifyDataSetChanged();
     }
 
+    public boolean isAnyActorSelected() {
+        for (Actor actor : actors) {
+            if (actor.isSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void isSelected(){
+
+    }
 
     static class ActorViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewActorName;
-        ImageView actorsImageView;
+        private TextView textViewActorName;
+        private ImageView actorsImageView;
 
         public ActorViewHolder(@NonNull View itemView) {
             super(itemView);
             actorsImageView = itemView.findViewById(R.id.actorsImageView);
             textViewActorName = itemView.findViewById(R.id.textViewActorName);
+        }
+        public void bind(Actor actor){
+            textViewActorName.setText(actor.getName());
         }
     }
 }

@@ -1,12 +1,12 @@
 package com.example.movieapplication.ui.actors;
-
-import com.example.movieapplication.ui.genres.Genre;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class ActorResponse {
-    private List<Actor> actors;
 
+    @SerializedName("results")
+    private List<Actor> actors;
     public List<Actor> getActors() {
         return actors;
     }

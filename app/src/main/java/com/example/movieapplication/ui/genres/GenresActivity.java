@@ -2,6 +2,7 @@ package com.example.movieapplication.ui.genres;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -10,14 +11,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
+import com.example.movieapplication.ui.SharedPreferencesHelper;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GenresActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GenreAdapter genreAdapter;
 
     private GenreViewModel genreViewModel;
+
+    /*SharedPreferencesHelper<String> genreSharedPreferencesHelper = new SharedPreferencesHelper<>(this);
+    Set<String> selectedGenres = new HashSet<>();
+    GenreSharedPreferencesHelper.saveData("selected_genres", selectedGenres);*/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,5 +46,13 @@ public class GenresActivity extends AppCompatActivity {
                 }
             }
         });
+
+      /*  btnSaveGenres.setOnClickListener(new View.OnClickListener()){
+            @Override
+            public void onClick(View view){
+                List<Genre> selectedGenres = genreAdapter.getSelectedGenres();
+                genreViewModel.saveSelectedGenres(selectedGenres);
+            }
+        }*/
     }
 }
