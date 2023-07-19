@@ -5,11 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movieapplication.database.interfaces.TMDBApiService;
-import com.example.movieapplication.ui.SharedPreferencesHelper;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,16 +26,6 @@ public class GenreViewModel extends ViewModel {
 
         return genresLiveData;
     }
-
-   /* public void saveSelectedGenres(List<Genre> genres){
-        Set<String> selectedGenres = new HashSet<>();
-        for(Genre genre : genres){
-            if(genre.isSelected()){
-                selectedGenres.add(genre.getName());
-            }
-        }
-        SharedPreferencesHelper.saveData(application, "selecte_genres", selectedGenres);
-    }*/
 
     private void loadGenres(){
 
@@ -61,12 +48,12 @@ public class GenreViewModel extends ViewModel {
                         genresLiveData.setValue(genres);
                     }
                 } else {
-                    // Tratează cazul în care răspunsul nu este reușit
+                    // Handle unsuccessful response
                 }
             }
             @Override
             public void onFailure(Call<GenreResponse> call, Throwable t) {
-                // Tratează cazul în care solicitarea eșuează
+                // Handle failure
             }
     });
 }

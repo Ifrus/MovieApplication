@@ -1,8 +1,10 @@
 package com.example.movieapplication.ui.genres;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -11,9 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
-import com.example.movieapplication.ui.SharedPreferencesHelper;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,9 +23,7 @@ public class GenresActivity extends AppCompatActivity {
 
     private GenreViewModel genreViewModel;
 
-    /*SharedPreferencesHelper<String> genreSharedPreferencesHelper = new SharedPreferencesHelper<>(this);
-    Set<String> selectedGenres = new HashSet<>();
-    GenreSharedPreferencesHelper.saveData("selected_genres", selectedGenres);*/
+    private Button btnSaveGenres;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +35,16 @@ public class GenresActivity extends AppCompatActivity {
         genreAdapter = new GenreAdapter();
         recyclerView.setAdapter(genreAdapter);
 
+        btnSaveGenres = findViewById(R.id.btnSaveGenres);
+        btnSaveGenres.setEnabled(false);
+
+        genreAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateSaveButtonEnabled();
+            }
+        });
+
         genreViewModel = new ViewModelProvider(this).get(GenreViewModel.class);
         genreViewModel.getGenres().observe(this, new Observer<List<Genre>>() {
             @Override
@@ -47,12 +55,31 @@ public class GenresActivity extends AppCompatActivity {
             }
         });
 
-      /*  btnSaveGenres.setOnClickListener(new View.OnClickListener()){
+        btnSaveGenres.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                List<Genre> selectedGenres = genreAdapter.getSelectedGenres();
-                genreViewModel.saveSelectedGenres(selectedGenres);
+            public void onClick(View v) {
+                saveSelectedGenres();
             }
-        }*/
+        });
     }
-}
+
+    private void updateSaveButtonEnabled() {
+        Set<String> selectedGenres = genreAdapter.getSelectedGenres();
+        btnSaveGenres.setEnabled(!selectedGenres.isEmpty());
+    }
+
+    private void saveSelectedGenres() {
+        Set<String> selectedGenres = genreAdapter.getSelectedGenres();
+
+        // Save the selected genres in SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("selectedGenres", selectedGenres);
+        editor.apply();
+
+        // Finish the activity and return to the previous screen
+        finish();
+    }
+
+    }
+

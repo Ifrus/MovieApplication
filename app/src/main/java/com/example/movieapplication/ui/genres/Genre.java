@@ -1,13 +1,11 @@
 package com.example.movieapplication.ui.genres;
 
-import android.content.Context;
-
-import com.example.movieapplication.ui.SharedPreferencesHelper;
-
 public class Genre {
     private int id;
 
     private String name;
+
+    private boolean isSelected;
 
     public Genre(int id, String name){
         this.id=id;
@@ -18,8 +16,12 @@ public class Genre {
 
     public String getName(){return name; }
 
- /*   public void saveData(Context context) {
-        SharedPreferencesHelper.saveData(context, "genre_data", this);
-    }*/
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }
 
