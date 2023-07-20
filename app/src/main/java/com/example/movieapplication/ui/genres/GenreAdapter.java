@@ -55,14 +55,12 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
             selectedGenres.remove(genre.getName());
         }
     }
-
     class GenreViewHolder extends RecyclerView.ViewHolder {
         private final TextView genreNameTextView;
 
         public GenreViewHolder(@NonNull View itemView) {
             super(itemView);
             genreNameTextView = itemView.findViewById(R.id.genreNameTextView);
-
             genreNameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,10 +73,8 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
                 }
             });
         }
-
         public void bind(Genre genre) {
             genreNameTextView.setText(genre.getName());
-
             // Change the text color based on the selection status
             if (genre.isSelected()) {
                 genreNameTextView.setTextColor(Color.GREEN);

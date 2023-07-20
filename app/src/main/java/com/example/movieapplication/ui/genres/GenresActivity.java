@@ -20,9 +20,7 @@ import java.util.Set;
 public class GenresActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GenreAdapter genreAdapter;
-
     private GenreViewModel genreViewModel;
-
     private Button btnSaveGenres;
 
     @Override
@@ -54,7 +52,6 @@ public class GenresActivity extends AppCompatActivity {
                 }
             }
         });
-
         btnSaveGenres.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +67,6 @@ public class GenresActivity extends AppCompatActivity {
 
     private void saveSelectedGenres() {
         Set<String> selectedGenres = genreAdapter.getSelectedGenres();
-
         // Save the selected genres in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -80,6 +76,5 @@ public class GenresActivity extends AppCompatActivity {
         // Finish the activity and return to the previous screen
         finish();
     }
-
-    }
+}
 

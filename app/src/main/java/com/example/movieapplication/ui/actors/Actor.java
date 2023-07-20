@@ -8,12 +8,12 @@ import com.google.gson.annotations.SerializedName;
 public class Actor{
 
     private final String name;
-    private final String profilePath;
+    private final String profile_path;
     private boolean isSelected;
 
-    public Actor(String name, String profilePath) {
+    public Actor(String name, String profile_path) {
         this.name = name;
-        this.profilePath = profilePath;
+        this.profile_path = profile_path;
     }
 
     public String getName() {
@@ -21,7 +21,7 @@ public class Actor{
     }
 
     public String getImage() {
-        return profilePath;
+        return profile_path;
     }
 
     public boolean isSelected() {

@@ -93,8 +93,8 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
             }
 
             // Load the actor's image using Picasso or your preferred image loading library
-            String profilePath = actor.getImage();
-            String imageUrl = "https://image.tmdb.org/t/p/w200" + profilePath;
+            String profile_path = actor.getImage();
+            String imageUrl = "https://image.tmdb.org/t/p/w200" + profile_path;
             Picasso.get().load(imageUrl).into(actorsImageView);
         }
     }

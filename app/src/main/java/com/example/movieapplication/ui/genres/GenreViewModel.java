@@ -15,7 +15,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GenreViewModel extends ViewModel {
-
     private MutableLiveData<List<Genre>> genresLiveData;
 
     public LiveData<List<Genre>> getGenres(){
@@ -23,7 +22,6 @@ public class GenreViewModel extends ViewModel {
             genresLiveData = new MutableLiveData<>();
             loadGenres();
         }
-
         return genresLiveData;
     }
 
@@ -36,7 +34,6 @@ public class GenreViewModel extends ViewModel {
 
         TMDBApiService movieApiService = retrofit.create(TMDBApiService.class);
         Call<GenreResponse> call = movieApiService.getGenres();
-       /* Set<String> selectedGenres = SharedPreferencesHelper.getData(application, "selected_genres", null);*/
 
         call.enqueue(new Callback<GenreResponse>() {
             @Override
@@ -57,6 +54,5 @@ public class GenreViewModel extends ViewModel {
             }
     });
 }
-
 }
 
