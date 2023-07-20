@@ -1,6 +1,9 @@
 package com.example.movieapplication.ui.actors;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,18 @@ import com.example.movieapplication.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder>{
+public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder> {
     private List<Actor> actors = new ArrayList<>();
+    private Set<String> selectedActors = new HashSet<>();
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -30,52 +41,62 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
     public void onBindViewHolder(@NonNull ActorViewHolder holder, int position) {
         Actor actor = actors.get(position);
         holder.bind(actor);
-        holder.textViewActorName.setText(actor.getName());
-
-        String profile_path = actor.getImage();
-        String imageUrl = "https://image.tmdb.org/t/p/w200"+ profile_path;
-        Picasso.get().load(imageUrl).into(holder.actorsImageView);
     }
 
-//    public List<Actor> getActors() {
-//        return actors;
-//    }
     @Override
     public int getItemCount() {
         return actors.size();
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
-        notifyDataSetChanged();
+    public Set<String> getSelectedActors() {
+        return selectedActors;
     }
 
-    public boolean isAnyActorSelected() {
-        for (Actor actor : actors) {
-            if (actor.isSelected()) {
-                return true;
-            }
+    public static void toggleActorSelection(Actor actor, Set<String> selectedActors) {
+        actor.setSelected(!actor.isSelected());
+        if (actor.isSelected()) {
+            selectedActors.add(actor.getName());
+        } else {
+            selectedActors.remove(actor.getName());
         }
-        return false;
     }
-
-    public void isSelected(){
-
-    }
-
-    static class ActorViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView textViewActorName;
-        private ImageView actorsImageView;
+    class ActorViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textViewActorName;
+        private final ImageView actorsImageView;
 
         public ActorViewHolder(@NonNull View itemView) {
             super(itemView);
             actorsImageView = itemView.findViewById(R.id.actorsImageView);
             textViewActorName = itemView.findViewById(R.id.textViewActorName);
+
+           textViewActorName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Actor actor = actors.get(position);
+                        toggleActorSelection(actor, selectedActors);
+                        notifyDataSetChanged(); // Refresh the list to update selection colors
+                    }
+                }
+            });
         }
-        public void bind(Actor actor){
+
+        public void bind(Actor actor) {
             textViewActorName.setText(actor.getName());
+
+            // Change the text color based on the selection status
+            if (actor.isSelected()) {
+                textViewActorName.setTextColor(Color.GREEN);
+            } else {
+                textViewActorName.setTextColor(Color.BLACK);
+            }
+
+            // Load the actor's image using Picasso or your preferred image loading library
+            String profilePath = actor.getImage();
+            String imageUrl = "https://image.tmdb.org/t/p/w200" + profilePath;
+            Picasso.get().load(imageUrl).into(actorsImageView);
         }
     }
 }
+

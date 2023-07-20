@@ -26,26 +26,27 @@ public class ActorsActivity extends AppCompatActivity {
     private ActorViewModel actorViewModel;
 
     private Button btnSaveActors;
-    private static final String KEY_ACTORS = "selected_actors";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_actors);
 
-        btnSaveActors = findViewById(R.id.btnSaveActors);
-        btnSaveActors.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //saveSelectedActors();
-                finish();
-            }
-        });
-
         recyclerView = findViewById(R.id.recyclerViewActors);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         actorAdapter = new ActorAdapter();
         recyclerView.setAdapter(actorAdapter);
+
+        btnSaveActors = findViewById(R.id.btnSaveActors);
+        btnSaveActors.setEnabled(false);
+
+        actorAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateSaveButtonEnabled();
+            }
+        });
+
 
         actorViewModel = new ViewModelProvider(this).get(ActorViewModel.class);
         actorViewModel.getActors().observe(this, new Observer<List<Actor>>() {
@@ -53,26 +54,35 @@ public class ActorsActivity extends AppCompatActivity {
             public void onChanged(List<Actor> actors) {
                 if (actors != null) {
                     actorAdapter.setActors(actors);
-                   // updateSaveButtonEnabled();
                 }
             }
         });
-    }
-    /*private void saveSelectedActors() {
-        Set<String> selectedActors = new HashSet<>();
-        List<Actor> actors = actorAdapter.getActors();
-            for (Actor actor : actors) {
-                if (actor.isSelected()) {
-                    selectedActors.add(actor.getName());
-                }
+        btnSaveActors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveSelectedActors();
             }
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putStringSet(KEY_ACTORS, selectedActors);
-            editor.apply();
-        }
+        });
+    }
+
     private void updateSaveButtonEnabled() {
-        // Enable the save button if any actor is selected, disable it otherwise
-        btnSaveActors.setEnabled(actorAdapter.isAnyActorSelected());
-    }*/
+        Set<String> selectedActors = actorAdapter.getSelectedActors();
+        btnSaveActors.setEnabled(!selectedActors.isEmpty());
+    }
+
+    private void saveSelectedActors() {
+        Set<String> selectedActors = actorAdapter.getSelectedActors();
+
+        // Save the selected actors in SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("selectedActors", selectedActors);
+        editor.apply();
+
+        // Finish the activity and return to the previous screen
+        finish();
+    }
+
+
 }
+
