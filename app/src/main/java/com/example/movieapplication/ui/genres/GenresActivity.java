@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -60,6 +61,9 @@ public class GenresActivity extends AppCompatActivity {
         });
     }
 
+    private void showPreferencesSavedPopup() {
+        Toast.makeText(this, "Your preferences are saved!", Toast.LENGTH_SHORT).show();}
+
     private void updateSaveButtonEnabled() {
         Set<String> selectedGenres = genreAdapter.getSelectedGenres();
         btnSaveGenres.setEnabled(!selectedGenres.isEmpty());
@@ -72,6 +76,7 @@ public class GenresActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet("selectedGenres", selectedGenres);
         editor.apply();
+        showPreferencesSavedPopup();
 
         // Finish the activity and return to the previous screen
         finish();

@@ -5,23 +5,22 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/editTextKeywords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_keywords_separated_by_commas"
+        android:id="@+id/keywordsEditText"
+        android:layout_width="373dp"
+        android:layout_height="93dp"
+        android:hint="@string/enter_keywords_separated_by_semicolon"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
-        android:padding="12dp"/>
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/btnSaveKeywords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/SAVE"
-        android:layout_below="@id/editTextKeywords"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@id/keywordsEditText"
         android:layout_marginTop="16dp"
-        android:enabled="false" />
+        android:enabled="false"
+        android:text="@string/SAVE" />
 
 </RelativeLayout>

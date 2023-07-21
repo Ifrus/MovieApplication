@@ -1,6 +1,7 @@
 package com.example.movieapplication.ui.keywords;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -15,6 +16,7 @@ import com.example.movieapplication.ui.genres.Genre;
 import com.example.movieapplication.ui.genres.GenreResponse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,39 +28,43 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class KeywordViewModel extends ViewModel {
-    private MutableLiveData<Keyword> keywordLiveData;
     private SharedPreferences sharedPreferences;
+    private MutableLiveData<List<String>> keywordsLiveData;
 
-    private static final String KEY_KEYWORDS = "keywords";
-
-
-    public KeywordViewModel(@NonNull Application application, SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
+    public KeywordViewModel(Application application) {
+        super();
+        sharedPreferences = application.getSharedPreferences("MyKeywords", Context.MODE_PRIVATE);
+        keywordsLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<Keyword> getKeyword() {
-        if (keywordLiveData == null) {
-            keywordLiveData = new MutableLiveData<>();
-            loadKeyword();
+    public LiveData<List<String>> getKeywordsLiveData() {
+        // Verificăm dacă keywordsLiveData conține deja date, pentru a nu încărca din nou din SharedPreferences
+        if (keywordsLiveData.getValue() == null) {
+            loadKeywords();
         }
-        return keywordLiveData;
+        return keywordsLiveData;
     }
 
-    public void saveSelectedKeyword(Keyword keyword) {
+    private void loadKeywords() {
+        String keywordsString = sharedPreferences.getString("keywords", "");
+        List<String> keywordsList = Arrays.asList(keywordsString.split(";"));
+        keywordsLiveData.setValue(keywordsList);
+    }
+
+    public void saveKeywords(List<String> keywordsList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String keyword : keywordsList) {
+            stringBuilder.append(keyword).append(";");
+        }
+        // Eliminăm ultimul caracter ";" pentru a nu avea un separator în plus la final
+        String keywordsString = stringBuilder.toString().trim();
+        if (keywordsString.endsWith(";")) {
+            keywordsString = keywordsString.substring(0, keywordsString.length() - 1);
+        }
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> keywordSet = new HashSet<>(keyword.getKeywordsList());
-        editor.putStringSet(KEY_KEYWORDS, keywordSet);
+        editor.putString("keywords", keywordsString);
         editor.apply();
-        keywordLiveData.setValue(keyword);
-    }
-
-    private void loadKeyword() {
-        Set<String> keywordSet = sharedPreferences.getStringSet(KEY_KEYWORDS, null);
-        if (keywordSet != null) {
-            List<String> keywordsList = new ArrayList<>(keywordSet);
-            Keyword keyword = new Keyword();
-            keyword.setKeywordsList(keywordsList);
-            keywordLiveData.setValue(keyword);
-        }
+        keywordsLiveData.setValue(keywordsList);
     }
 }

@@ -75,7 +75,6 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         }
         public void bind(Genre genre) {
             genreNameTextView.setText(genre.getName());
-            // Change the text color based on the selection status
             if (genre.isSelected()) {
                 genreNameTextView.setTextColor(Color.GREEN);
             } else {
