@@ -65,24 +65,19 @@ public class KeywordsActivity extends AppCompatActivity {
         Toast.makeText(this, "Your preferences are saved!", Toast.LENGTH_SHORT).show();}
 
     private void saveKeywords() {
-        // Get the keywords entered by the user
         String keywordsText = keywordsEditText.getText().toString();
 
-        // Split the keywords by semicolon to get individual keywords
         String[] keywordsArray = keywordsText.split(";");
 
-        // Create a Set to store the keywords
-        Set<String> keywordsSet = new HashSet<>(Arrays.asList(keywordsArray));
+        Set<String> selectedKeywords = new HashSet<>(Arrays.asList(keywordsArray));
 
-        // Save the keywords in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet("selectedKeywords", keywordsSet);
+        editor.putStringSet("selectedKeywords", selectedKeywords);
         editor.apply();
 
         Toast.makeText(this, "Keywords saved successfully!", Toast.LENGTH_SHORT).show();
 
-        // Finish the activity and return to the previous screen
         finish();
     }
 }

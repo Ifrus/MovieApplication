@@ -42,7 +42,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
 
         setClickListener();
-        Log.e("onboarding", "init");
+       // Log.e("onboarding", "init");
         navigateToPreferencesActivity();
     }
     private void navigateToPreferencesActivity() {

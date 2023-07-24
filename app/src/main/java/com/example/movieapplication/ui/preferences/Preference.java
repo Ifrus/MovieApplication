@@ -7,8 +7,17 @@ public class Preference {
     private List<String> actors;
     private List<String> keywords;
     private String title;
-    private String poster_path;;
+    private String poster_path;
     private String overview;
+
+    public Preference(String title, String poster_path, String overview, List<String> genres, List<String> actors, List<String> keywords) {
+        this.title = title;
+        this.poster_path = poster_path;
+        this.overview = overview;
+        this.genres = genres;
+        this.actors = actors;
+        this.keywords = keywords;
+    }
 
     public List<String> getGenres() {
         return genres;

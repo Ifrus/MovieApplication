@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -26,6 +27,7 @@ public class ActorsActivity extends AppCompatActivity {
     private ActorViewModel actorViewModel;
 
     private Button btnSaveActors;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +67,10 @@ public class ActorsActivity extends AppCompatActivity {
         });
     }
 
+    private void showPreferencesSavedPopup() {
+        Toast.makeText(this, "Your preferences are saved!", Toast.LENGTH_SHORT).show();}
+
+
     private void updateSaveButtonEnabled() {
         Set<String> selectedActors = actorAdapter.getSelectedActors();
         btnSaveActors.setEnabled(!selectedActors.isEmpty());
@@ -82,7 +88,5 @@ public class ActorsActivity extends AppCompatActivity {
         // Finish the activity and return to the previous screen
         finish();
     }
-
-
 }
 

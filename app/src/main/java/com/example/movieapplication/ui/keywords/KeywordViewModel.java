@@ -38,7 +38,6 @@ public class KeywordViewModel extends ViewModel {
     }
 
     public LiveData<List<String>> getKeywordsLiveData() {
-        // Verificăm dacă keywordsLiveData conține deja date, pentru a nu încărca din nou din SharedPreferences
         if (keywordsLiveData.getValue() == null) {
             loadKeywords();
         }
@@ -56,7 +55,7 @@ public class KeywordViewModel extends ViewModel {
         for (String keyword : keywordsList) {
             stringBuilder.append(keyword).append(";");
         }
-        // Eliminăm ultimul caracter ";" pentru a nu avea un separator în plus la final
+
         String keywordsString = stringBuilder.toString().trim();
         if (keywordsString.endsWith(";")) {
             keywordsString = keywordsString.substring(0, keywordsString.length() - 1);

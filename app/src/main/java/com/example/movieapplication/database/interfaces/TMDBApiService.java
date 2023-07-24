@@ -14,7 +14,7 @@ public interface TMDBApiService {
     @GET("genre/movie/list?api_key=d773193a88ede0c03b5da21759b8dea6&language=en-US")
     Call<GenreResponse> getGenres();
 
-    @GET("search/movie?api_key=d773193a88ede0c03b5da21759b8dea6&language=en-US")
+    @GET("discover/movie?api_key=d773193a88ede0c03b5da21759b8dea6&language=en-US&")
     Call<PreferenceResponse> getPreferences();
 
 }

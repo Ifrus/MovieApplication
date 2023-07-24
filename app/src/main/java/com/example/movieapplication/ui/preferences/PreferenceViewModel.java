@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movieapplication.database.interfaces.TMDBApiService;
+import com.example.movieapplication.ui.actors.Actor;
+import com.example.movieapplication.ui.actors.ActorResponse;
 import com.example.movieapplication.ui.genres.Genre;
 import com.example.movieapplication.ui.genres.GenreResponse;
 
@@ -20,13 +22,67 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PreferenceViewModel extends ViewModel {
-    private MutableLiveData<List<Preference>> preferencesLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Preference>> preferencesLiveData;
+    private List<Preference> preferences;
 
-    public LiveData<List<Preference>> getFilteredMoviesData() {
+
+    public LiveData<List<Preference>>  getPreferences() {
+        if(preferencesLiveData == null){
+            preferencesLiveData = new MutableLiveData<>();
+            loadPreferences();
+        }
         return preferencesLiveData;
     }
 
-    public void loadFilteredMovies(List<String> selectedGenres, List<String> selectedActors, List<String> selectedKeywords) {
+    private void loadPreferences() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.themoviedb.org/3/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        TMDBApiService movieApiService = retrofit.create(TMDBApiService.class);
+        Call<PreferenceResponse> call = movieApiService.getPreferences();
+
+        call.enqueue(new Callback<PreferenceResponse>() {
+            @Override
+            public void onResponse(Call<PreferenceResponse> call, Response<PreferenceResponse> response) {
+                if (response.isSuccessful()) {
+                        PreferenceResponse preferenceResponse = response.body();
+                    Log.d("PreferenceViewModel", "API response: " + response.body());
+                        if (preferenceResponse != null) {
+                            List<Preference> preferences = preferenceResponse.getPreferences();
+                            preferencesLiveData.setValue(preferences);
+                        }
+                } else {
+                    Log.e("PreferenceViewModel", "Error: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PreferenceResponse> call, Throwable t) {
+                Log.e("PreferenceViewModel", "API call failed", t);
+            }
+        });
+    }
+}
+
+  /*  List<String> selectedGenres;
+    List<String> selectedActors;
+    List<String> selectedKeywords;
+
+    public LiveData<List<Preference>> getFilteredMoviesData() {
+        if(preferencesLiveData == null){
+            preferencesLiveData = new MutableLiveData<>();
+            loadFilteredMovies();
+        }
+        return preferencesLiveData;
+    }
+
+    public void loadFilteredMovies() {
+
+        Log.d("PreferenceViewModel", "Selected Genres: " + selectedGenres.toString());
+        Log.d("PreferenceViewModel", "Selected Actors: " + selectedActors.toString());
+        Log.d("PreferenceViewModel", "Selected Keywords: " + selectedKeywords.toString());
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.themoviedb.org/3/")
@@ -43,19 +99,27 @@ public class PreferenceViewModel extends ViewModel {
                     PreferenceResponse preferenceResponse = response.body();
                     if (preferenceResponse != null) {
                         List<Preference> allPreferences = preferenceResponse.getPreferences();
+                        if (allPreferences != null) {
+                            Log.d("PreferenceViewModel", "All Preferences Size: " + allPreferences.size());
+                            Log.d("PreferenceViewModel", "API Response: " + allPreferences.toString());
+                            // Filter the movies based on saved preferences
+                            List<Preference> filteredPreferences = filterPreferences(allPreferences, selectedGenres, selectedActors, selectedKeywords);
+                            Log.d("PreferenceViewModel", "Filtered Preferences Size: " + filteredPreferences.size());
 
-                        // Filter the movies based on saved preferences
-                        List<Preference> filteredPreferences = filterPreferences(allPreferences, selectedGenres, selectedActors, selectedKeywords);
-                        preferencesLiveData.setValue(filteredPreferences);
+                            preferencesLiveData.setValue(filteredPreferences);
+                        } else {
+                            Log.e("PreferenceViewModel", "Preference list is null");
+                        }
+                    } else {
+                        Log.e("PreferenceViewModel", "Preference response is null");
                     }
                 } else {
                     Log.e("PreferenceViewModel", "Error: " + response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<PreferenceResponse> call, Throwable t) {
-                // Handle failure
+                Log.e("PreferenceViewModel", "API call failed", t);
             }
         });
     }
@@ -65,7 +129,11 @@ public class PreferenceViewModel extends ViewModel {
         for (Preference preference : allPreferences) {
             if (matchesGenres(preference, selectedGenres) && matchesActors(preference, selectedActors) && matchesKeywords(preference, selectedKeywords)) {
                 filteredPreferences.add(preference);
-            }
+            }else  Log.d("PreferenceViewModel", "Preference did not match filters: " + preference.toString());
+        }
+        Log.d("PreferenceViewModel", "Filtered Preferences:");
+        for (Preference filteredPreference : filteredPreferences) {
+            Log.d("PreferenceViewModel", filteredPreference.toString());
         }
         return filteredPreferences;
     }
@@ -73,13 +141,14 @@ public class PreferenceViewModel extends ViewModel {
     private boolean matchesGenres(Preference preference, List<String> selectedGenres) {
         List<String> preferenceGenres = preference.getGenres();
 
-        // Check if any of the preference's genres match the selectedGenres
-        for (String selectedGenre : selectedGenres) {
-            if (preferenceGenres.contains(selectedGenre)) {
-                return true;
+        if (preferenceGenres != null && !preferenceGenres.isEmpty()) {
+            // Check if any of the preference's genres match the selectedGenres
+            for (String selectedGenre : selectedGenres) {
+                if (preferenceGenres.contains(selectedGenre)) {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
@@ -92,7 +161,6 @@ public class PreferenceViewModel extends ViewModel {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -105,7 +173,6 @@ public class PreferenceViewModel extends ViewModel {
                 return true;
             }
         }
-
         return false;
     }
-}
+}*/

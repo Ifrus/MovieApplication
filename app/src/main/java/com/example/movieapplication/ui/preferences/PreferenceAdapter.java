@@ -1,5 +1,6 @@
 package com.example.movieapplication.ui.preferences;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import com.example.movieapplication.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
 public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.PreferenceViewHolder> {
     private List<Preference> preferences;
 
@@ -33,6 +33,9 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         Preference preference = preferences.get(position);
         holder.bind(preference);
+        Log.d("PreferenceAdapter", "Movie Title: " + preference.getTitle());
+        Log.d("PreferenceAdapter", "Movie Overview: " + preference.getMovieOverview());
+        Log.d("PreferenceAdapter", "Poster URL: " + preference.getPosterUrl());
     }
 
     @Override
@@ -56,11 +59,10 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
             titleTextView.setText(preference.getMovieTitle());
             overviewTextView.setText(preference.getMovieOverview());
 
-            Picasso.get()
-                    .load(preference.getPosterUrl())
-                    .fit()
-                    .centerCrop()// You can add a placeholder drawable here
-                    .into(posterImageView);
+            // Load the preference's image using Picasso or your preferred image loading library
+            String poster_path = preference.getPosterUrl();
+            String imageUrl = "https://image.tmdb.org/t/p/w200" + poster_path;
+            Picasso.get().load(imageUrl).into(posterImageView);
         }
     }
 }

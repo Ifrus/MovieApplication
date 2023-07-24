@@ -47,17 +47,21 @@
 
         <activity
             android:name=".ui.preferences.PreferencesActivity"
-            android:label="Preferences" />
+            android:exported="true"
+            android:label="Movie List">
+        </activity>
 
-        <!-- Declare the SearchMoviesActivity -->
         <activity
             android:name=".ui.search_movies.SearchMoviesActivity"
-            android:label="Search Movies" />
+            android:exported="true"
+            android:label="Search Movies">
+        </activity>
 
-        <!-- Declare the SavedMoviesActivity -->
         <activity
             android:name=".ui.saved_movies.SavedMoviesActivity"
-            android:label="Saved Movies" />
+            android:exported="true"
+            android:label="Saved Movies">
+        </activity>
 
 
 
