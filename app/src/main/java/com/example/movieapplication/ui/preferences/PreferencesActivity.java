@@ -45,8 +45,7 @@ public class PreferencesActivity extends AppCompatActivity {
         recyclerView.setAdapter(preferenceAdapter);
 
         List<Preference> samplePreferences = new ArrayList<>();
-        samplePreferences.add(new Preference("Movie 1", "poster_path_1", "Overview of Movie 1", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-        samplePreferences.add(new Preference("Movie 2", "poster_path_2", "Overview of Movie 2", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+
         preferenceAdapter.setPreferences(samplePreferences);
 
         preferenceViewModel = new ViewModelProvider(this).get(PreferenceViewModel.class);

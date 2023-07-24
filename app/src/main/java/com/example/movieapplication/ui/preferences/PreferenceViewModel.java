@@ -51,6 +51,9 @@ public class PreferenceViewModel extends ViewModel {
                     Log.d("PreferenceViewModel", "API response: " + response.body());
                         if (preferenceResponse != null) {
                             List<Preference> preferences = preferenceResponse.getPreferences();
+                            for (Preference preference : preferences) {
+                                preference.setFavorite(false);
+                            }
                             preferencesLiveData.setValue(preferences);
                         }
                 } else {

@@ -4,6 +4,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,25 +46,76 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
     }
 
     static class PreferenceViewHolder extends RecyclerView.ViewHolder {
-        private final TextView titleTextView;
+        private final TextView titleYearTextView;
         private final TextView overviewTextView;
         private final ImageView posterImageView;
 
+        private final ImageButton addToFavoritesButton;
+        private final Button addToWatchedButton;
+
+
         public PreferenceViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
+            titleYearTextView = itemView.findViewById(R.id.titleYearTextView);
             overviewTextView = itemView.findViewById(R.id.overviewTextView);
             posterImageView = itemView.findViewById(R.id.posterImageView);
+            addToFavoritesButton = itemView.findViewById(R.id.addToFavoritesButton);
+            addToWatchedButton = itemView.findViewById(R.id.addToWatchedButton);
+
+            addToFavoritesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        // Notify the listener that the favorite button is clicked for this item
+                        listener.onFavoriteButtonClick(position);
+                    }
+                }
+            });
+
+        }
+
+        public interface OnFavoriteButtonClickListener {
+            void onFavoriteButtonClick(int position);
+        }
+
+        private OnFavoriteButtonClickListener listener;
+
+        public void setOnFavoriteButtonClickListener(OnFavoriteButtonClickListener listener) {
+            this.listener = listener;
         }
 
         public void bind(Preference preference) {
-            titleTextView.setText(preference.getMovieTitle());
+            titleYearTextView.setText(preference.getTitle() + " (" + preference.getYear() + ")");
             overviewTextView.setText(preference.getMovieOverview());
 
             // Load the preference's image using Picasso or your preferred image loading library
             String poster_path = preference.getPosterUrl();
             String imageUrl = "https://image.tmdb.org/t/p/w200" + poster_path;
             Picasso.get().load(imageUrl).into(posterImageView);
+
+            if (preference.isFavorite()) {
+                addToFavoritesButton.setImageResource(R.drawable.ic_heart_filled);
+            } else {
+                addToFavoritesButton.setImageResource(R.drawable.ic_heart_empty);
+            }
+
+
+            addToFavoritesButton.setOnClickListener(v -> {
+                preference.setFavorite(!preference.isFavorite());
+
+                // Update the heart color based on the new isFavorite value
+                if (preference.isFavorite()) {
+                    addToFavoritesButton.setImageResource(R.drawable.ic_heart_filled);
+                } else {
+                    addToFavoritesButton.setImageResource(R.drawable.ic_heart_empty);
+                }
+            });
+
+            addToWatchedButton.setOnClickListener(v -> {
+                // Handle adding to watched
+                // You can save the data to Room in the onClick listener here
+            });
         }
     }
 }
