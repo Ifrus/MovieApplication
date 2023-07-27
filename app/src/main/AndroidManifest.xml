@@ -52,19 +52,14 @@
         </activity>
 
         <activity
-            android:name=".ui.search_movies.SearchMoviesActivity"
-            android:exported="true"
-            android:label="Search Movies">
-        </activity>
-
-        <activity
             android:name=".ui.saved_movies.SavedMoviesActivity"
             android:exported="true"
             android:label="Saved Movies">
         </activity>
 
-
+        <activity android:name=".ui.movie_details.MovieDetailsActivity"
+            android:exported="true">
+        </activity>
 
     </application>
-
 </manifest>

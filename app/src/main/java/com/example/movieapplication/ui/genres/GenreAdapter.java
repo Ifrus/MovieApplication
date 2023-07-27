@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
     private List<Genre> genres = new ArrayList<>();
-    private Set<String> selectedGenres = new HashSet<>();
+    private Set<Integer> selectedGenres = new HashSet<>();
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
@@ -43,16 +43,16 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         return genres.size();
     }
 
-    public Set<String> getSelectedGenres() {
+    public Set<Integer> getSelectedGenres() {
         return selectedGenres;
     }
 
-    public static void toggleGenreSelection(Genre genre, Set<String> selectedGenres) {
+    public static void toggleGenreSelection(Genre genre, Set<Integer> selectedGenres) {
         genre.setSelected(!genre.isSelected());
         if (genre.isSelected()) {
-            selectedGenres.add(genre.getName());
+            selectedGenres.add(genre.getId());
         } else {
-            selectedGenres.remove(genre.getName());
+            selectedGenres.remove(genre.getId());
         }
     }
     class GenreViewHolder extends RecyclerView.ViewHolder {

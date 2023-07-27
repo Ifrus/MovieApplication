@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder> {
     private List<Actor> actors = new ArrayList<>();
-    private Set<String> selectedActors = new HashSet<>();
+    private Set<Integer> selectedActors = new HashSet<>();
 
     public void setActors(List<Actor> actors) {
         this.actors = actors;
@@ -48,16 +48,16 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         return actors.size();
     }
 
-    public Set<String> getSelectedActors() {
+    public Set<Integer> getSelectedActors() {
         return selectedActors;
     }
 
-    public static void toggleActorSelection(Actor actor, Set<String> selectedActors) {
+    public static void toggleActorSelection(Actor actor, Set<Integer> selectedActors) {
         actor.setSelected(!actor.isSelected());
         if (actor.isSelected()) {
-            selectedActors.add(actor.getName());
+            selectedActors.add(actor.getId());
         } else {
-            selectedActors.remove(actor.getName());
+            selectedActors.remove(actor.getId());
         }
     }
     class ActorViewHolder extends RecyclerView.ViewHolder {
@@ -85,14 +85,12 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         public void bind(Actor actor) {
             textViewActorName.setText(actor.getName());
 
-            // Change the text color based on the selection status
             if (actor.isSelected()) {
                 textViewActorName.setTextColor(Color.GREEN);
             } else {
                 textViewActorName.setTextColor(Color.BLACK);
             }
 
-            // Load the actor's image using Picasso or your preferred image loading library
             String profile_path = actor.getImage();
             String imageUrl = "https://image.tmdb.org/t/p/w200" + profile_path;
             Picasso.get().load(imageUrl).into(actorsImageView);

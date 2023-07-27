@@ -1,8 +1,11 @@
 package com.example.movieapplication.ui.actors;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
+import com.google.gson.Gson;
 
 import java.util.HashSet;
 import java.util.List;
@@ -72,20 +76,21 @@ public class ActorsActivity extends AppCompatActivity {
 
 
     private void updateSaveButtonEnabled() {
-        Set<String> selectedActors = actorAdapter.getSelectedActors();
+        Set<Integer> selectedActors = actorAdapter.getSelectedActors();
         btnSaveActors.setEnabled(!selectedActors.isEmpty());
     }
 
     private void saveSelectedActors() {
-        Set<String> selectedActors = actorAdapter.getSelectedActors();
+        Set<Integer> selectedActors = actorAdapter.getSelectedActors();
 
-        // Save the selected actors in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet("selectedActors", selectedActors);
-        editor.apply();
+        Gson gson = new Gson();
+        String selectedActorsJson = gson.toJson(selectedActors);
+        Log.d(TAG, "saveSelectedActors: " + selectedActorsJson);
 
-        // Finish the activity and return to the previous screen
+        editor.putString("selectedActors", selectedActorsJson);
+        editor.apply();
         finish();
     }
 }

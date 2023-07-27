@@ -8,4 +8,6 @@
     <string name="SAVE">SAVE</string>
     <string name="navigation_drawer_open" />
     <string name="navigation_drawer_close" />
+    <string name="watched_movies">Watched Movies</string>
+    <string name="favorites_movies">Favorites Movies</string>
 </resources>

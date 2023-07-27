@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_searchmovies"
-            android:title="Search Movies" />
+            android:id="@+id/menu_preferences"
+            android:title="Movie List" />
         <item
-            android:id="@+id/menu_savedmovies"
+            android:id="@+id/menu_saved_movies"
             android:title="Saved Movies" />
     </group>
 </menu>

@@ -1,8 +1,11 @@
 package com.example.movieapplication.ui.genres;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +40,7 @@ public class GenresActivity extends AppCompatActivity {
 
         btnSaveGenres = findViewById(R.id.btnSaveGenres);
         btnSaveGenres.setEnabled(false);
+
 
         genreAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -65,20 +70,20 @@ public class GenresActivity extends AppCompatActivity {
         Toast.makeText(this, "Your preferences are saved!", Toast.LENGTH_SHORT).show();}
 
     private void updateSaveButtonEnabled() {
-        Set<String> selectedGenres = genreAdapter.getSelectedGenres();
+        Set<Integer> selectedGenres = genreAdapter.getSelectedGenres();
         btnSaveGenres.setEnabled(!selectedGenres.isEmpty());
     }
 
     private void saveSelectedGenres() {
-        Set<String> selectedGenres = genreAdapter.getSelectedGenres();
-        // Save the selected genres in SharedPreferences
+        Set<Integer> selectedGenres = genreAdapter.getSelectedGenres();
         SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet("selectedGenres", selectedGenres);
-        editor.apply();
-        showPreferencesSavedPopup();
+        Gson gson = new Gson();
+        String selectedGenresJson = gson.toJson(selectedGenres);
+        Log.d(TAG, "saveSelectedGenres: " + selectedGenresJson);
 
-        // Finish the activity and return to the previous screen
+        editor.putString("selectedGenres", selectedGenresJson);
+        editor.apply();
         finish();
     }
 }

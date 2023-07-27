@@ -17,7 +17,10 @@ import com.example.movieapplication.ui.actors.ActorsActivity;
 import com.example.movieapplication.ui.genres.GenresActivity;
 import com.example.movieapplication.ui.keywords.KeywordsActivity;
 import com.example.movieapplication.ui.preferences.PreferencesActivity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,16 +45,25 @@ public class OnBoardingActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
 
         setClickListener();
-       // Log.e("onboarding", "init");
         navigateToPreferencesActivity();
     }
     private void navigateToPreferencesActivity() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-        boolean hasActors = !sharedPreferences.getStringSet("selectedActors", new HashSet<>()).isEmpty();
-        boolean hasGenres = !sharedPreferences.getStringSet("selectedGenres", new HashSet<>()).isEmpty();
-        boolean hasKeywords = !sharedPreferences.getStringSet("selectedKeywords", new HashSet<>()).isEmpty();
+        String selectedActorsJson = sharedPreferences.getString("selectedActors", null);
+        String selectedGenresJson = sharedPreferences.getString("selectedGenres", null);
+        Set<String> selectedKeywords = sharedPreferences.getStringSet("selectedKeywords", new HashSet<>());
 
-        if (hasActors && hasGenres && hasKeywords) {
+        Gson gson = new Gson();
+        Type actorType = new TypeToken<Set<Integer>>() {}.getType();
+        Type genreType = new TypeToken<Set<Integer>>() {}.getType();
+
+        Set<Integer> selectedActors = gson.fromJson(selectedActorsJson, actorType);
+        Set<Integer> selectedGenres = gson.fromJson(selectedGenresJson, genreType);
+
+        boolean hasActors = selectedActors != null && !selectedActors.isEmpty();
+        boolean hasGenres = selectedGenres != null && !selectedGenres.isEmpty();
+
+        if (hasActors && hasGenres && !selectedKeywords.isEmpty()) {
             Intent intent = new Intent(OnBoardingActivity.this, PreferencesActivity.class);
             startActivity(intent);
         } else {
@@ -84,7 +96,15 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void GenresCheck(){
-        Set<String> selectedGenres = sharedPreferences.getStringSet("selectedGenres", new HashSet<>());
+        String selectedGenresJson = sharedPreferences.getString("selectedGenres", null);
+        Set<Integer> selectedGenres = new HashSet<>();
+
+        if (selectedGenresJson != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<Set<Integer>>() {}.getType();
+            selectedGenres = gson.fromJson(selectedGenresJson, type);
+        }
+
         if (!selectedGenres.isEmpty()) {
             genresButton.setVisibility(View.GONE);
         } else {
@@ -93,7 +113,16 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void ActorsCheck(){
-        Set<String> selectedActors = sharedPreferences.getStringSet("selectedActors", new HashSet<>());
+        String selectedActorsJson = sharedPreferences.getString("selectedActors", null);
+        Set<Integer> selectedActors = new HashSet<>();
+
+        if (selectedActorsJson != null) {
+            // Convert the JSON string to a List or Set of integers
+            Gson gson = new Gson();
+            Type type = new TypeToken<Set<Integer>>() {}.getType();
+            selectedActors = gson.fromJson(selectedActorsJson, type);
+        }
+
         if (!selectedActors.isEmpty()) {
             actorsButton.setVisibility(View.GONE);
         } else {
@@ -116,6 +145,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         GenresCheck();
         KeywordsCheck();
         ActorsCheck();
+        navigateToPreferencesActivity();
     }
 }
 

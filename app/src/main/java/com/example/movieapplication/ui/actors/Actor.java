@@ -7,14 +7,18 @@ import com.google.gson.annotations.SerializedName;
 
 public class Actor{
 
+    private final int id;
     private final String name;
     private final String profile_path;
     private boolean isSelected;
 
-    public Actor(String name, String profile_path) {
+    public Actor(String name, String profile_path, int id) {
         this.name = name;
         this.profile_path = profile_path;
+        this.id = id;
     }
+
+    public int getId() { return id; }
 
     public String getName() {
         return name;

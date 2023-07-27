@@ -1,9 +1,11 @@
 package com.example.movieapplication.ui.preferences;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,11 +15,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapplication.R;
+import com.example.movieapplication.ui.movie_details.MovieDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.PreferenceViewHolder> {
     private List<Preference> preferences;
+
+    private OnItemClickListener onItemClickListener;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Preference preference);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
 
     public void setPreferences(List<Preference> preferences) {
         this.preferences = preferences;
@@ -38,6 +52,27 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
         Log.d("PreferenceAdapter", "Movie Title: " + preference.getTitle());
         Log.d("PreferenceAdapter", "Movie Overview: " + preference.getMovieOverview());
         Log.d("PreferenceAdapter", "Poster URL: " + preference.getPosterUrl());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MovieDetailsActivity.class);
+                intent.putExtra("movieTitle", preference.getTitle());
+                intent.putExtra("posterUrl", preference.getPosterUrl());
+                intent.putExtra("overview", preference.getMovieOverview());
+                intent.putExtra("releaseDate", preference.getYear());
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(preference);
+                }
+            }
+        });
     }
 
     @Override
@@ -49,9 +84,9 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
         private final TextView titleYearTextView;
         private final TextView overviewTextView;
         private final ImageView posterImageView;
-
         private final ImageButton addToFavoritesButton;
         private final Button addToWatchedButton;
+
 
 
         public PreferenceViewHolder(@NonNull View itemView) {
@@ -67,12 +102,11 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION && listener != null) {
-                        // Notify the listener that the favorite button is clicked for this item
+
                         listener.onFavoriteButtonClick(position);
                     }
                 }
             });
-
         }
 
         public interface OnFavoriteButtonClickListener {
@@ -103,8 +137,6 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
 
             addToFavoritesButton.setOnClickListener(v -> {
                 preference.setFavorite(!preference.isFavorite());
-
-                // Update the heart color based on the new isFavorite value
                 if (preference.isFavorite()) {
                     addToFavoritesButton.setImageResource(R.drawable.ic_heart_filled);
                 } else {
@@ -113,8 +145,6 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
             });
 
             addToWatchedButton.setOnClickListener(v -> {
-                // Handle adding to watched
-                // You can save the data to Room in the onClick listener here
             });
         }
     }
