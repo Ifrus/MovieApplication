@@ -73,7 +73,6 @@ public class MovieDetailViewModel extends ViewModel {
             String videoUrl = "https://www.youtube.com/watch?v=" + video.getVideoKey();
             videoUrls.add(videoUrl);
         }
-
         return new MovieDetail( title, releaseDate,  posterPath,  overview, videoUrls);
     }
 }

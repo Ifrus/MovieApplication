@@ -1,7 +1,9 @@
 package com.example.movieapplication.ui.movie_details;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -56,18 +58,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 String firstVideoUrl = videoUrls.get(0);
                 initializeVideoPlayer(firstVideoUrl);
             }
-
-            movieDetailViewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
-            movieDetailViewModel.getMovieDetails(movieId).observe(this, movieDetail -> {
-                if (movieDetail != null) {
-                    setTitle(movieDetail.getTitle());
-                    overviewTextView.setText(movieDetail.getOverview());
-                }
-            });
         }
     }
 
     private void initializeVideoPlayer(String videoUrl) {
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.e("VideoPlayer", "Error occurred while playing video");
+                // Handle the error (e.g., show an error message)
+                return false;
+            }
+        });
+
         MediaController mediaController = new MediaController(this);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
